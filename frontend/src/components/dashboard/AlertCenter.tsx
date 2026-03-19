@@ -22,6 +22,7 @@ const STATUS_ICONS: Record<string, React.ElementType> = {
 
 const STATUS_OPTIONS = ["all", "open", "acknowledged", "resolved"] as const;
 const SEVERITY_OPTIONS = ["all", "critical", "warning", "info"] as const;
+const ALERTS_VIEWPORT_CLASS = "h-[90vh] sm:h-[98vh] overflow-y-auto pr-1 pb-1";
 
 export function AlertCenter({ alerts, isLoading }: AlertCenterProps) {
   const queryClient = useQueryClient();
@@ -96,7 +97,7 @@ export function AlertCenter({ alerts, isLoading }: AlertCenterProps) {
     return (
       <div className="bg-card rounded-xl border border-border p-6 animate-pulse-gentle">
         <div className="h-4 w-32 bg-muted rounded mb-4" />
-        <div className="space-y-3">
+        <div className={`${ALERTS_VIEWPORT_CLASS} space-y-3`}>
           {Array.from({ length: 3 }).map((_, index) => (
             <div key={index} className="h-20 bg-muted/50 rounded-lg" />
           ))}
@@ -169,18 +170,22 @@ export function AlertCenter({ alerts, isLoading }: AlertCenterProps) {
       </div>
 
       {!alerts?.length ? (
-        <div className="text-center py-8 text-muted-foreground">
-          <ShieldAlert className="h-10 w-10 mx-auto mb-2 opacity-40" />
-          <p className="text-sm font-medium">No alerts at this time</p>
-          <p className="text-xs mt-1">Alerts will appear here when pollutant readings exceed thresholds.</p>
+        <div className={`text-center text-muted-foreground flex items-center justify-center ${ALERTS_VIEWPORT_CLASS}`}>
+          <div>
+            <ShieldAlert className="h-10 w-10 mx-auto mb-2 opacity-40" />
+            <p className="text-sm font-medium">No alerts at this time</p>
+            <p className="text-xs mt-1">Alerts will appear here when pollutant readings exceed thresholds.</p>
+          </div>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-8 text-muted-foreground">
-          <Filter className="h-8 w-8 mx-auto mb-2 opacity-40" />
-          <p className="text-sm">No alerts match the current filters.</p>
+        <div className={`text-center text-muted-foreground flex items-center justify-center ${ALERTS_VIEWPORT_CLASS}`}>
+          <div>
+            <Filter className="h-8 w-8 mx-auto mb-2 opacity-40" />
+            <p className="text-sm">No alerts match the current filters.</p>
+          </div>
         </div>
       ) : (
-        <div className="space-y-4 max-h-[500px] overflow-y-auto">
+        <div className={`space-y-4 ${ALERTS_VIEWPORT_CLASS}`}>
           {(["open", "acknowledged", "resolved"] as const).map((status) => {
             const group = groupedByStatus[status];
             if (!group?.length) {

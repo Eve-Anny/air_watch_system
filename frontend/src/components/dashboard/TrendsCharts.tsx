@@ -132,6 +132,16 @@ export function TrendsCharts({ measurements, stats, isLoading }: TrendsProps) {
         </div>
         <ResponsiveContainer width="100%" height={300}>
           <Chart data={trendData}>
+            {chartType === "area" && (
+              <defs>
+                {Object.entries(POLLUTANT_COLORS).map(([key, color]) => (
+                  <linearGradient key={key} id={`area-${key}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={color} stopOpacity={0.55} />
+                    <stop offset="95%" stopColor={color} stopOpacity={0.08} />
+                  </linearGradient>
+                ))}
+              </defs>
+            )}
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(214, 20%, 90%)" />
             <XAxis dataKey="time" tick={{ fontSize: 11 }} stroke="hsl(215, 14%, 50%)" />
             <YAxis tick={{ fontSize: 11 }} stroke="hsl(215, 14%, 50%)" />
@@ -146,13 +156,22 @@ export function TrendsCharts({ measurements, stats, isLoading }: TrendsProps) {
                   type="monotone"
                   dataKey={key}
                   stroke={color}
-                  fill={color}
-                  fillOpacity={0.1}
-                  strokeWidth={1.5}
+                  fill={`url(#area-${key})`}
+                  fillOpacity={1}
+                  strokeWidth={1.2}
                   dot={false}
+                  activeDot={false}
                 />
               ) : (
-                <Line key={key} type="monotone" dataKey={key} stroke={color} strokeWidth={1.5} dot={false} />
+                <Line
+                  key={key}
+                  type="monotone"
+                  dataKey={key}
+                  stroke={color}
+                  strokeWidth={2}
+                  dot={{ r: 2 }}
+                  activeDot={{ r: 4 }}
+                />
               ),
             )}
           </Chart>

@@ -107,7 +107,7 @@ function DashboardContent() {
         </section>
 
         {/* Alerts + Forms */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           <AlertCenter alerts={alerts.data} isLoading={alerts.isLoading} />
           <div className="space-y-6">
             <ManualReadingForm />
