@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 220 25% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 10%;
+
+    --primary: 199 89% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 18% 93%;
+    --secondary-foreground: 220 20% 20%;
+
+    --muted: 210 14% 95%;
+    --muted-foreground: 215 14% 50%;
+
+    --accent: 172 55% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 20% 90%;
+    --input: 214 20% 90%;
+    --ring: 199 89% 38%;
+
+    --radius: 0.75rem;
+
+    /* AQI Severity Colors */
+    --aqi-good: 152 60% 42%;
+    --aqi-good-bg: 152 60% 95%;
+    --aqi-moderate: 45 93% 47%;
+    --aqi-moderate-bg: 45 93% 95%;
+    --aqi-unhealthy-sensitive: 25 95% 53%;
+    --aqi-unhealthy-sensitive-bg: 25 95% 95%;
+    --aqi-unhealthy: 0 72% 51%;
+    --aqi-unhealthy-bg: 0 72% 96%;
+    --aqi-very-unhealthy: 300 50% 40%;
+    --aqi-very-unhealthy-bg: 300 50% 96%;
+    --aqi-hazardous: 350 60% 30%;
+    --aqi-hazardous-bg: 350 60% 96%;
+
+    /* Severity */
+    --severity-low: 199 89% 38%;
+    --severity-medium: 45 93% 47%;
+    --severity-high: 25 95% 53%;
+    --severity-critical: 0 72% 51%;
+
+    /* Atmospheric gradients */
+    --gradient-sky: linear-gradient(135deg, hsl(199, 89%, 38%) 0%, hsl(172, 55%, 40%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(210, 20%, 98%) 0%, hsl(199, 40%, 94%) 100%);
+    --gradient-card-shine: linear-gradient(135deg, hsla(0,0%,100%,0.8) 0%, hsla(0,0%,100%,0.2) 100%);
+
+    --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .gradient-sky {
+    background: var(--gradient-sky);
+  }
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+  .aqi-good { color: hsl(var(--aqi-good)); }
+  .aqi-moderate { color: hsl(var(--aqi-moderate)); }
+  .aqi-unhealthy-sensitive { color: hsl(var(--aqi-unhealthy-sensitive)); }
+  .aqi-unhealthy { color: hsl(var(--aqi-unhealthy)); }
+  .aqi-very-unhealthy { color: hsl(var(--aqi-very-unhealthy)); }
+  .aqi-hazardous { color: hsl(var(--aqi-hazardous)); }
+}

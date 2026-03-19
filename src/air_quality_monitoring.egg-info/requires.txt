@@ -1,0 +1,14 @@
+fastapi<1.0,>=0.118
+joblib<2.0,>=1.4
+pandas<3.0,>=2.2
+plotly<7.0,>=6.0
+pydantic<3.0,>=2.11
+pymongo<5.0,>=4.11
+python-dotenv<2.0,>=1.0
+requests<3.0,>=2.32
+scikit-learn<2.0,>=1.7
+streamlit<2.0,>=1.50
+uvicorn[standard]<1.0,>=0.37
+
+[mqtt]
+paho-mqtt<3.0,>=2.1

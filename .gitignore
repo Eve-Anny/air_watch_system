@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.streamlit/secrets.toml
+artifacts/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.log
+frontend/node_modules/
+frontend/.vite/
+frontend/playwright-report/
