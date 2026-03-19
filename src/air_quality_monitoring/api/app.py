@@ -80,9 +80,10 @@ def create_app() -> FastAPI:
     @app.get("/api/v1/measurements", response_model=list[MeasurementRecord])
     def list_measurements(
         limit: int = Query(default=120, ge=1, le=1000),
+        offset: int = Query(default=0, ge=0),
         device_id: str | None = None,
     ) -> list[MeasurementRecord]:
-        return container.repository.list_measurements(limit=limit, device_id=device_id)
+        return container.repository.list_measurements(limit=limit, offset=offset, device_id=device_id)
 
     @app.get("/api/v1/measurements/latest", response_model=MeasurementRecord | None)
     def latest_measurement(device_id: str | None = None) -> MeasurementRecord | None:

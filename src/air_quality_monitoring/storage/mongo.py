@@ -37,6 +37,7 @@ class MongoRepository(Repository):
     def list_measurements(
         self,
         limit: int = 100,
+        offset: int = 0,
         since: datetime | None = None,
         device_id: str | None = None,
     ) -> list[MeasurementRecord]:
@@ -45,7 +46,7 @@ class MongoRepository(Repository):
             query["timestamp"] = {"$gte": since}
         if device_id:
             query["device_id"] = device_id
-        rows = self._measurements.find(query).sort("timestamp", self._desc).limit(limit)
+        rows = self._measurements.find(query).sort("timestamp", self._desc).skip(max(offset, 0)).limit(limit)
         return [MeasurementRecord.model_validate(self._strip_id(row)) for row in rows]
 
     def latest_measurement(self, device_id: str | None = None) -> MeasurementRecord | None:

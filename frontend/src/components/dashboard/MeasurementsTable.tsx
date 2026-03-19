@@ -1,25 +1,34 @@
-import { useMemo, useState } from "react";
-import { ArrowUpDown, Inbox, Search } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ArrowRight, ArrowUpDown, Inbox, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import type { Measurement } from "@/lib/api";
 import { formatTimestamp, getAqiConfig } from "@/lib/aqi";
+import { useMeasurementsPage } from "@/hooks/use-api";
 
 interface MeasurementsTableProps {
-  measurements: Measurement[] | undefined;
-  isLoading: boolean;
   deviceFilter?: string;
 }
 
 type SortKey = "timestamp" | "computed_index" | "pm25" | "device_id";
 
+const PAGE_SIZE = 8;
+
 function formatValue(value: number | null | undefined, decimals = 1): string {
   return value != null ? value.toFixed(decimals) : "--";
 }
 
-export function MeasurementsTable({ measurements, isLoading, deviceFilter }: MeasurementsTableProps) {
+export function MeasurementsTable({ deviceFilter }: MeasurementsTableProps) {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("timestamp");
   const [sortAsc, setSortAsc] = useState(false);
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    setPage(0);
+  }, [deviceFilter]);
+
+  const { data: measurements, isLoading, isFetching } = useMeasurementsPage(page, PAGE_SIZE);
 
   const filtered = useMemo(() => {
     if (!measurements) {
@@ -29,10 +38,11 @@ export function MeasurementsTable({ measurements, isLoading, deviceFilter }: Mea
     let list = measurements;
     if (search) {
       const query = search.toLowerCase();
-      list = list.filter((measurement) =>
-        measurement.device_id?.toLowerCase().includes(query) ||
-        measurement.location?.toLowerCase().includes(query) ||
-        measurement.aqi_category?.toLowerCase().includes(query),
+      list = list.filter(
+        (measurement) =>
+          measurement.device_id?.toLowerCase().includes(query) ||
+          measurement.location?.toLowerCase().includes(query) ||
+          measurement.aqi_category?.toLowerCase().includes(query),
       );
     }
 
@@ -82,6 +92,7 @@ export function MeasurementsTable({ measurements, isLoading, deviceFilter }: Mea
 
   const noData = !measurements?.length;
   const noResults = !!measurements?.length && filtered.length === 0;
+  const hasNextPage = (measurements?.length ?? 0) === PAGE_SIZE;
 
   return (
     <div className="bg-card rounded-xl border border-border p-6">
@@ -90,7 +101,7 @@ export function MeasurementsTable({ measurements, isLoading, deviceFilter }: Mea
         <div className="relative w-full sm:w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search device, location..."
+            placeholder="Search on this page..."
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             className="pl-9 h-9 text-sm"
@@ -111,7 +122,7 @@ export function MeasurementsTable({ measurements, isLoading, deviceFilter }: Mea
       ) : noResults ? (
         <div className="text-center py-10 text-muted-foreground">
           <Search className="h-8 w-8 mx-auto mb-2 opacity-40" />
-          <p className="text-sm">No measurements match "{search}"</p>
+          <p className="text-sm">No measurements on this page match "{search}"</p>
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -143,7 +154,7 @@ export function MeasurementsTable({ measurements, isLoading, deviceFilter }: Mea
               </tr>
             </thead>
             <tbody>
-              {filtered.slice(0, 50).map((measurement) => {
+              {filtered.map((measurement: Measurement) => {
                 const config = getAqiConfig(measurement.aqi_category);
                 return (
                   <tr key={measurement.id} className="border-b border-border/50 hover:bg-muted/50 transition-colors">
@@ -173,6 +184,34 @@ export function MeasurementsTable({ measurements, isLoading, deviceFilter }: Mea
           </table>
         </div>
       )}
+
+      <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
+        <p className="text-xs text-muted-foreground">
+          Page {page + 1} | {PAGE_SIZE} rows per page
+        </p>
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setPage((current) => Math.max(current - 1, 0))}
+            disabled={page === 0 || isFetching}
+            className="gap-1.5"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Previous
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setPage((current) => current + 1)}
+            disabled={!hasNextPage || isFetching}
+            className="gap-1.5"
+          >
+            Next
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

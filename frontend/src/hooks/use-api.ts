@@ -16,7 +16,22 @@ export function useMeasurements() {
   const { baseUrl, deviceFilter, pollingInterval, pollingPaused } = useDashboardSettings();
   return useQuery({
     queryKey: ["measurements", baseUrl, deviceFilter],
-    queryFn: () => apiClient.getMeasurements(deviceFilter ? { device_id: deviceFilter } : undefined),
+    queryFn: () =>
+      apiClient.getMeasurements(deviceFilter ? { device_id: deviceFilter, limit: 240, offset: 0 } : { limit: 240, offset: 0 }),
+    refetchInterval: pollingPaused ? false : pollingInterval,
+    retry: 1,
+  });
+}
+
+export function useMeasurementsPage(page: number, pageSize: number) {
+  const { baseUrl, deviceFilter, pollingInterval, pollingPaused } = useDashboardSettings();
+  const offset = Math.max(page, 0) * pageSize;
+  return useQuery({
+    queryKey: ["measurements-page", baseUrl, deviceFilter, page, pageSize],
+    queryFn: () =>
+      apiClient.getMeasurements(
+        deviceFilter ? { device_id: deviceFilter, limit: pageSize, offset } : { limit: pageSize, offset },
+      ),
     refetchInterval: pollingPaused ? false : pollingInterval,
     retry: 1,
   });

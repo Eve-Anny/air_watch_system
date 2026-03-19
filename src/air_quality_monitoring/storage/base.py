@@ -15,6 +15,7 @@ class Repository(ABC):
     def list_measurements(
         self,
         limit: int = 100,
+        offset: int = 0,
         since: datetime | None = None,
         device_id: str | None = None,
     ) -> list[MeasurementRecord]:
@@ -52,4 +53,3 @@ class Repository(ABC):
     @abstractmethod
     def acknowledge_alert(self, alert_id: str, acknowledged_by: str) -> AlertRecord | None:
         raise NotImplementedError
-

@@ -147,7 +147,7 @@ class ApiClient {
     return this.request<SummaryResponse>(`/api/v1/summary${buildQueryString(params)}`);
   }
 
-  getMeasurements(params?: { device_id?: string }) {
+  getMeasurements(params?: { device_id?: string; limit?: number; offset?: number }) {
     return this.request<Measurement[]>(`/api/v1/measurements${buildQueryString(params)}`);
   }
 

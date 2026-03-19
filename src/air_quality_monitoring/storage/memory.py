@@ -21,6 +21,7 @@ class MemoryRepository(Repository):
     def list_measurements(
         self,
         limit: int = 100,
+        offset: int = 0,
         since: datetime | None = None,
         device_id: str | None = None,
     ) -> list[MeasurementRecord]:
@@ -31,7 +32,8 @@ class MemoryRepository(Repository):
         if since:
             values = [item for item in values if item.timestamp and item.timestamp >= since]
         values.sort(key=lambda item: item.timestamp or item.ingested_at, reverse=True)
-        return values[:limit]
+        start = max(offset, 0)
+        return values[start : start + limit]
 
     def latest_measurement(self, device_id: str | None = None) -> MeasurementRecord | None:
         measurements = self.list_measurements(limit=1, device_id=device_id)
@@ -82,4 +84,3 @@ class MemoryRepository(Repository):
             )
             self._alerts[alert_id] = updated
             return updated
-

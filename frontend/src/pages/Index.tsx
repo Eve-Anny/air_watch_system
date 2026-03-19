@@ -103,11 +103,7 @@ function DashboardContent() {
 
         {/* Measurements Table */}
         <section>
-          <MeasurementsTable
-            measurements={measurements.data}
-            isLoading={measurements.isLoading}
-            deviceFilter={deviceFilter}
-          />
+          <MeasurementsTable deviceFilter={deviceFilter} />
         </section>
 
         {/* Alerts + Forms */}
