@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+                                                                                                                                import { motion } from "framer-motion";
 import { Activity, AlertTriangle, BarChart3, Cpu, TrendingUp } from "lucide-react";
 import type { SummaryResponse } from "@/lib/api";
 

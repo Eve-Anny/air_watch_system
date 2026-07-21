@@ -49,7 +49,7 @@ Set-Location ..
 ## Run The Backend
 
 ```powershell
-uvicorn air_quality_monitoring.api.app:app --reload --host 127.0.0.1 --port 8000
+python -m uvicorn air_quality_monitoring.api.app:app --reload --host 127.0.0.1 --port 8000
 ```
 
 Once the frontend has been built, the API serves the dashboard from `http://127.0.0.1:8000/`.
@@ -90,7 +90,22 @@ The dashboard is designed to work in two phases:
 
 Install the optional MQTT dependency, then run:
 
+Install Mosquitto on Windows
+
+Open this page in your browser:
+
+https://mosquitto.org/download/
+
+After installation, close Git Bash and open it again. Then test:
+
+mosquitto -v
+
+If the command is still not found, run it directly:
+
+"/c/Program Files/mosquitto/mosquitto.exe" -v
+
 ```powershell
+source .venv/Scripts/activate
 python -m air_quality_monitoring.mqtt_subscriber --broker 127.0.0.1 --topic air-quality/readings
 ```
 
@@ -118,3 +133,18 @@ The included tests cover the core AQI and alert logic without external dependenc
 ```powershell
 python -m unittest discover -s tests
 ```
+
+
+# Running Project local
+
+## Run Consumer publisher for data sim
+source .venv/Scripts/activate
+python -m air_quality_monitoring.mqtt_subscriber --broker 127.0.0.1 --topic air-quality/readings
+
+## Activate Environment Run Backend 
+source .venv/Scripts/activate
+python -m uvicorn air_quality_monitoring.api.app:app --reload --host 127.0.0.1 --port 8000
+
+## Run Frontend
+cd frontend/
+npm run dev
